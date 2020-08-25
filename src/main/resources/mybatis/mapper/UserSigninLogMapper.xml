@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.easyblog.mapper.UserSigninLogMapper">
+  <cache type="org.mybatis.caches.ehcache.LoggingEhcache">
+    <property name="eviction" value="LRU" />
+    <property name="flushInterval" value="6000000" />
+    <property name="size" value="1024" />
+    <property name="readOnly" value="false" />
+  </cache>
+  <resultMap id="BaseResultMap" type="top.easyblog.entity.po.UserSigninLog">
+    <id column="log_id" jdbcType="BIGINT" property="logId" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="login_ip" jdbcType="VARCHAR" property="loginIp" />
+    <result column="login_location" jdbcType="VARCHAR" property="loginLocation" />
+    <result column="login_time" jdbcType="TIMESTAMP" property="loginTime" />
+  </resultMap>
+
+
+  <select id="getByPrimaryKey" parameterType="java.lang.Long" resultType="top.easyblog.entity.po.UserSigninLog">
+    select * from user_signIn_log where log_id = #{id}
+  </select>
+
+  <select id="getAll" resultType="list">
+    select * from user_signIn_log
+  </select>
+
+  <select id="count" resultType="integer">
+    select count(*) from user_signIn_log
+  </select>
+
+  <select id="getUserLoginInfo" resultType="top.easyblog.entity.po.UserSigninLog">
+    select * from user_signIn_log where user_id=#{userId} ORDER BY login_time DESC limit ${num}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from user_signIn_log
+    where log_id = #{logId,jdbcType=BIGINT}
+  </delete>
+
+  <!--update、insert、delete默认会清缓存-->
+  <insert id="save" parameterType="top.easyblog.entity.po.UserSigninLog">
+    insert into user_signIn_log (user_id, login_ip,login_location, login_time,login_result)
+    values (#{userId}, #{loginIp}, #{loginLocation},now(),#{loginResult})
+  </insert>
+
+
+  <insert id="saveSelective" parameterType="top.easyblog.entity.po.UserSigninLog">
+    insert into user_signIn_log
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="loginIp != null">
+        login_ip,
+      </if>
+      <if test="loginLocation != null">
+        login_location,
+      </if>
+        login_time,
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="loginIp != null">
+        #{loginIp,jdbcType=VARCHAR},
+      </if>
+      <if test="loginLocation != null">
+        #{loginLocation,jdbcType=VARCHAR},
+      </if>
+      now()
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="top.easyblog.entity.po.UserSigninLog">
+    update user_signIn_log
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="loginIp != null">
+        login_ip = #{loginIp,jdbcType=VARCHAR},
+      </if>
+      <if test="loginLocation != null">
+        login_location = #{loginLocation,jdbcType=VARCHAR},
+      </if>
+      <if test="loginTime != null">
+        login_time = #{loginTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where log_id = #{logId,jdbcType=BIGINT}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="top.easyblog.entity.po.UserSigninLog">
+    update user_signIn_log
+    set user_id = #{userId,jdbcType=INTEGER},
+      login_ip = #{loginIp,jdbcType=VARCHAR},
+      login_location = #{loginLocation,jdbcType=VARCHAR},
+      login_time = #{loginTime,jdbcType=TIMESTAMP}
+    where log_id = #{logId,jdbcType=BIGINT}
+  </update>
+</mapper>

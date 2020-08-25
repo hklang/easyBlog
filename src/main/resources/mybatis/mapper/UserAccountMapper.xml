@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.easyblog.mapper.UserAccountMapper">
+    <cache type="org.mybatis.caches.ehcache.LoggingEhcache">
+        <property name="eviction" value="LRU"/>
+        <property name="flushInterval" value="6000000"/>
+        <property name="size" value="1024"/>
+        <property name="readOnly" value="false"/>
+    </cache>
+
+    <insert id="save" parameterType="top.easyblog.entity.po.UserAccount">
+        insert into user_account (account_user, github, wechat, weibo, twitter, steam, qq)
+        values (#{accountUser}, #{github,jdbcType=VARCHAR}, #{wechat,jdbcType=VARCHAR}, #{weibo,jdbcType=VARCHAR},
+                #{twitter,jdbcType=VARCHAR}, #{steam,jdbcType=VARCHAR}, #{qq,jdbcType=VARCHAR})
+    </insert>
+
+    <select id="getByPrimaryKey" parameterType="long" resultType="top.easyblog.entity.po.UserAccount">
+        select *
+        from user_account
+        where account_id = #{id}
+    </select>
+
+
+    <select id="getByUserId" parameterType="integer" resultType="top.easyblog.entity.po.UserAccount">
+        select *
+        from user_account
+        where account_user = #{accountUser}
+    </select>
+
+    <update id="updateByPrimaryKey" parameterType="top.easyblog.entity.po.UserAccount">
+        update user_account
+        set github=#{github},
+            wechat=#{wechat},
+            qq=#{qq},
+            weibo=#{weibo},
+            twitter=#{twitter},
+            steam=#{steam}
+        where account_user = #{accountUser,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateSelective" parameterType="top.easyblog.entity.po.UserAccount">
+        update user_account
+        <set>
+            <if test="github!=null">github=#{github,jdbcType=VARCHAR},</if>
+            <if test="wechat!=null">wechat=#{wechat,jdbcType=VARCHAR},</if>
+            <if test="qq!=null">qq=#{qq,jdbcType=VARCHAR},</if>
+            <if test="weibo!=null">weibo=#{weibo,jdbcType=VARCHAR},</if>
+            <if test="twitter!=null">twitter=#{twitter,jdbcType=VARCHAR},</if>
+            <if test="steam!=null">steam=#{steam,jdbcType=VARCHAR},</if>
+        </set>
+        <where>
+            <choose>
+                <when test="accountId!=null and account>0">account_id=#{accountId,jdbcType=INTEGER}</when>
+                <when test="userId!=null and userId>0">account_user=#{accountUser,jdbcType=INTEGER}</when>
+                <when test="1==1">1=1</when>
+            </choose>
+        </where>
+    </update>
+
+</mapper>

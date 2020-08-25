@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>个人资料 - EasyBlog博客</title>
+    <link rel="shortcut icon" th:href="@{/static/favicon.ico}"/>
+    <link rel="bookmark" th:href="@{/static/favicon.ico}"/>
+    <link rel="stylesheet" href="../../../static/css/easyblog.base.css" th:href="@{/static/css/easyblog.base.css}">
+    <link rel="stylesheet" href="../../../static/css/custom_up_img.css" th:href="@{/static/css/custom_up_img.css}"/>
+    <link rel="stylesheet" href="../../../static/css/amazeui.min.css" th:href="@{/static/css/amazeui.min.css}">
+    <link rel="stylesheet" href="../../../static/css/amazeui.cropper.css" th:href="@{/static/css/amazeui.cropper.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
+    <style type="text/css">
+        .up-img-cover {width: 100px;height: 100px;}
+        .up-img-cover img{width: 100%;}
+        .up-img-txt label{font-weight: 100;margin-top: 50px;}
+
+        .up-btn-ok {
+        }
+    </style>
+    <script src="../static/js/spop.js" th:src="@{/static/js/spop.js}"></script>
+    <link rel="stylesheet" href="../static/css/spop.css" th:href="@{/static/css/spop.css}">
+    <!--百度统计JS脚本-->
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?1d2b1074de8c4606d68aa61802a74c14";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+</head>
+<body>
+
+<!--导航-->
+<div th:replace="~{nav :: navbar}"></div>
+
+
+<!--中间内容-->
+<div class="m-content-container">
+    <div class="ui stackable grid">
+        <div class="one wide column"></div>
+        <!--左侧菜单栏-->
+        <div th:replace="~{personInfo-manage-sidebar::sidebar}"></div>
+        <!--博客内容-->
+        <div class="twelve wide column">
+            <div class="ui top grid stackable attached segment stackable">
+                <div class="row"
+                     style="border-bottom: 1px solid rgba(128,128,128,.2) !important;padding-bottom: 0 !important;">
+                    <h3 class="m-margin-top m-margin-bottom m-margin-left" style="font-weight: bold !important;font-size: 20px !important;color: #3d3d3d !important;">个人资料</h3>
+                </div>
+                <div class="three wide column">
+                    <img id="header-image" class="ui medium circular image image-122x122" th:src="@{${user.getUserHeaderImgUrl()}}"
+                         src="http://hbimg.b0.upaiyun.com/1f20743f57decb129f4563314eafca4f83f7a18d105ac-xpHDBI_fw658">
+                    <div class="up-img-cover"  id="up-img-touch" >
+                    <a href="javascript: void(0)" style="color: #3399ea !important;font-size: 14px !important;display: block !important;margin-left: 2.4em !important;" class="m-margin-top">修改头像</a></div>
+                </div>
+                <div class="thirteen wide column" style="padding-left: 0 !important;">
+                    <div class="row m-padded-no m-line-height">
+                        ID：<span th:text="${user.getUserId()}" style="color:grey">qq_41684392</span>
+                    </div>
+
+                    <div class="row m-padded-no m-line-height"
+                         style="border-bottom: 1px solid rgba(128,128,128,.2) !important;">
+                        <label>关注&nbsp;&nbsp;</label><span>200</span>
+                        <label class="m-margin-left">粉丝&nbsp;&nbsp;</label><span>0</span>
+                    </div>
+                    <div class="row m-padded-no m-line-height">
+
+                        <div class="ui grid">
+                            <div class="left floated five wide column">
+                                <label>昵称：</label><span id="nickName" th:text="${user.getUserNickname()}">LoveIT</span>
+                            </div>
+                            <div class="right floated right aligned five wide column">
+                                <a id="go" rel="leanModal" name="signup" href="#signup">修改资料</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row m-padded-no m-line-height">
+                        <label>实名：</label><span id="name" th:text="${user.getUserName()}"></span>
+                    </div>
+                    <div class="row m-padded-no m-line-height">
+                        <label>性别：</label>
+                        <span th:switch="${user.getUserGender()}">
+                        <span id="gender" th:case="M">男</span>
+                        <span id="gender" th:case="F">女</span>
+                    </span>
+                    </div>
+                    <div class="row m-padded-no m-line-height">
+                        <label>生日：</label><span id="birthday" th:text="${#dates.format(user.getUserBirthday(),'yyyy-MM-dd')}">1970-01-01</span>
+                    </div>
+                    <div class="row m-padded-no m-line-height">
+                        <label>地区：</label><span id="address" th:text="${user.getUserAddress()}">中国-西安</span>
+                    </div>
+                    <div class="row m-padded-no m-line-height">
+                        <label>行业：</label><span id="profession" th:text="${user.getUserPrefession()}">互联网，计算机</span>
+                    </div>
+                    <div class="row m-padded-no m-line-height">
+                        <label>职位：</label><span id="job" th:text="${user.getUserJobPosition()}"></span>
+                    </div>
+                    <div class="row m-padded-no m-line-height">
+                        <label>简介：</label><span id="desc" th:text="${user.getUserDescription()}"></span>
+                    </div>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--个人信息修改弹出框-->
+<div id="signup">
+    <div id="signup-ct">
+        <div id="signup-header">
+            <h2>修改资料</h2>
+            <a class="modal_close" href="javascript: void(0)"></a>
+        </div>
+        <form action="#" th:action="@{/manage/uc/updateInfo/{userId}(userId=${user.getUserId()})}" method="POST">
+            <div class="ui doubling stackable grid container">
+                <!--昵称-->
+                <div class="row " style="margin-top: 15px !important;padding-bottom: 0 !important;">
+                    <div class="center aligned three wide column" style="padding-top: 0.5em !important;">
+                        昵称
+                    </div>
+                    <div class="thirteen wide column" style="margin-top: 5px !important;padding-left: 0 !important;">
+                        <div class="ui field">
+                            <div class="ui input">
+                                <input name="userNickname" type="text" placeholder="请填写" th:value="${user.getUserNickname()}" style="width:446px !important">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--实名-->
+                <div class="row" style="padding-bottom: 0 !important;padding-top: 0 !important;">
+                    <div class="center aligned three wide column" style="padding-top: 0.5em !important;">
+                        实名
+                    </div>
+                    <div class="thirteen wide column" style="margin-top: 5px !important;padding-left: 0 !important;">
+                        <div class="ui field">
+                            <div class="thirteen wide column" style="margin-top: 5px !important;padding-left: 0 !important;">
+                                <div class="ui field">
+                                    <div class="ui input">
+                                        <input name="userName" type="text" placeholder="请填写" th:value="${user.getUserName()}" style="width:446px !important">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--职位-->
+                <div class="row" style="padding-bottom: 0 !important;padding-top: 0 !important;">
+                    <div class="center aligned three wide column" style="padding-top: 0.5em !important;">
+                        职位
+                    </div>
+                    <div class="thirteen wide column" style="margin-top: 5px !important;padding-left: 0 !important;">
+                        <div class="ui field">
+                            <div class="thirteen wide column"
+                                 style="margin-top: 5px !important;padding-left: 0 !important;">
+                                <div class="ui field">
+                                    <div class="ui input">
+                                        <input name="userJobPosition" type="text" placeholder="请填写" th:value="${user.getUserJobPosition()}" style="width:446px !important">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--性别-->
+                <div class="row" style="padding-bottom: 0 !important;padding-top: 8px !important;">
+                    <div class="center aligned three wide column" style="padding-top: 0.5em !important;">
+                        性别
+                    </div>
+                    <div class="thirteen wide column" style="padding-left: 0 !important;min-width:446px !important">
+                        <div class="field">
+                            <select name="minCount" class="ui dropdown">
+                                <option th:selected="${user.getUserGender()=='M'}" value="1">男</option>
+                                <option th:selected="${user.getUserGender()=='F'}" value="2">女</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <!--生日-->
+                <div class="row" style="padding-bottom: 0 !important;padding-top: 0 !important;">
+                    <div class="center aligned three wide column" style="padding-top: 0.5em !important;">
+                        生日
+                    </div>
+                    <div class="thirteen wide column" style="margin-top: 5px !important;padding-left: 0 !important;">
+                        <div class="ui field">
+                            <div class="thirteen wide column"
+                                 style="margin-top: 5px !important;padding-left: 0 !important;">
+                                <div class="ui field">
+                                    <div class="ui input">
+                                        <input name="birthday" type="date" th:value="${#dates.format(user.getUserBirthday(),'yyyy-MM-dd')}" style="width:446px !important">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--行业-->
+                <div class="row" style="padding-bottom: 0 !important;padding-top: 8px !important;">
+                    <div class="center aligned three wide column" style="padding-top: 0.5em !important;">
+                        行业
+                    </div>
+                    <div class="thirteen wide column" style="padding-left: 0 !important;min-width:446px !important">
+                        <div class="field">
+                            <select id="prefession" name="userPrefession" class="ui dropdown">
+                                <option th:selected="${#strings.equals(user.getUserPrefession(),null)}" value="000000">
+                                    请选择
+                                </option>
+                                <option th:selected="${#strings.equals(user.getUserPrefession(),'电子·微电子')}"
+                                        value="000001">电子·微电子
+                                </option>
+                                <option th:selected="${#strings.equals(user.getUserPrefession(),'通信(设备·运营·增值服务)')}"
+                                        value="000010">通信(设备·运营·增值服务)
+                                </option>
+                                <option th:selected="${#strings.equals(user.getUserPrefession(),'批发·零售')}"
+                                        value="000011">批发·零售
+                                </option>
+                                <option th:selected="${#strings.equals(user.getUserPrefession(),'贸易·进出口')}"
+                                        value="000100">贸易·进出口
+                                </option>
+                                <option th:selected="${#strings.equals(user.getUserPrefession(),'广告·会展·公关')}"
+                                        value="000101">广告·会展·公关
+                                </option>
+                                <option th:selected="${#strings.equals(user.getUserPrefession(),'专业服务(咨询·财会·法律等)')}"
+                                        value="000110">专业服务(咨询·财会·法律等)
+                                </option>
+                                <option th:selected="${#strings.equals(user.getUserPrefession(),'房地产开发·建筑与工程')}"
+                                        value="000111">房地产开发·建筑与工程
+                                </option>
+                                <option th:selected="${#strings.equals(user.getUserPrefession(),'娱乐·运动·休闲')}"
+                                        value="001000">娱乐·运动·休闲
+                                </option>
+                                <option th:selected="${#strings.equals(user.getUserPrefession(),'快速消费品(食品·饮料·日化·烟酒等)')}"
+                                        value="001001">快速消费品(食品·饮料·日化·烟酒等)
+                                </option>
+                                <option th:selected="${#strings.equals(user.getUserPrefession(),'家电业')}" value="001010">
+                                    家电业
+                                </option>
+                                <option th:selected="${#strings.equals(user.getUserPrefession(),'家居·室内设计·装潢')}"
+                                        value="001011">家居·室内设计·装潢
+                                </option>
+                                <option th:selected="${#strings.equals(user.getUserPrefession(),'旅游·酒店·餐饮服务')}"
+                                        value="001100">旅游·酒店·餐饮服务
+                                </option>
+                                <option th:selected="${#strings.equals(user.getUserPrefession(),'交通·运输·物流')}"
+                                        value="001101">交通·运输·物流
+                                </option>
+                                <option th:selected="${#strings.equals(user.getUserPrefession(),'办公设备·用品')}"
+                                        value="001110">办公设备·用品
+                                </option>
+                                <option th:selected="${#strings.equals(user.getUserPrefession(),'医疗设备·器械')}"
+                                        value="001111">医疗设备·器械
+                                </option>
+                                <option th:selected="${#strings.equals(user.getUserPrefession(),'汽车·摩托车(制造·维护·配件·销售·服务)')}"
+                                        value="010000">汽车·摩托车(制造·维护·配件·销售·服务)
+                                </option>
+                                <option th:selected="${#strings.equals(user.getUserPrefession(),'制药·生物工程')}"
+                                        value="010001">制药·生物工程
+                                </option>
+                                <option th:selected="${#strings.equals(user.getUserPrefession(),'环保')}" value="010010">
+                                    环保
+                                </option>
+                                <option th:selected="${#strings.equals(user.getUserPrefession(),'印刷·包装·造纸')}"
+                                        value="010011">印刷·包装·造纸
+                                </option>
+                                <option th:selected="${#strings.equals(user.getUserPrefession(),'中介服务(人才·商标专利)')}"
+                                        value="010100">中介服务(人才·商标专利)
+                                </option>
+                                <option th:selected="${#strings.equals(user.getUserPrefession(),'教育·培训·科研·院校')}"
+                                        value="010101">教育·培训·科研·院校
+                                </option>
+                                <option th:selected="${#strings.equals(user.getUserPrefession(),'医疗·保健·美容·卫生服务')}"
+                                        value="010110">医疗·保健·美容·卫生服务
+                                </option>
+                                <option th:selected="${#strings.equals(user.getUserPrefession(),'互联网·电子商务')}"
+                                        value="010111">互联网·电子商务
+                                </option>
+                                <option th:selected="${#strings.equals(#strings.trim(user.getUserPrefession()),'仪器·仪表·工业自动化·电气')}"
+                                        value="011000">仪器·仪表·工业自动化·电气
+                                </option>
+                                <option th:selected="${#strings.equals(user.getUserPrefession(),'计算机软件')}"
+                                        value="011001">计算机软件
+                                </option>
+                                <option th:selected="${#strings.equals(user.getUserPrefession(),'计算机硬件·网络设备')}"
+                                        value="011010">计算机硬件·网络设备
+                                </option>
+                                <option th:selected="${#strings.equals(user.getUserPrefession(),'IT服务·系统集成')}"
+                                        value="011011">IT服务·系统集成
+                                </option>
+                                <option th:selected="${#strings.equals(user.getUserPrefession(),'银行')}" value="011100">
+                                    银行
+                                </option>
+                                <option th:selected="${#strings.equals(user.getUserPrefession(),'保险')}" value="011101">
+                                    保险
+                                </option>
+                                <option th:selected="${#strings.equals(user.getUserPrefession(),'基金·证券·期货·投资')}"
+                                        value="011110">基金·证券·期货·投资
+                                </option>
+                                <option th:selected="${#strings.equals(user.getUserPrefession(),'耐用消费品(服饰·纺织·家具）')}"
+                                        value="011111">耐用消费品(服饰·纺织·家具）
+                                </option>
+                                <option th:selected="${#strings.equals(user.getUserPrefession(),'机械制造·机电·重工')}"
+                                        value="100000">机械制造·机电·重工
+                                </option>
+                                <option th:selected="${#strings.equals(user.getUserPrefession(),'原材料及加工（金属·木材·橡胶·塑料·玻璃·陶瓷·建材）')}"
+                                        value="100001">原材料及加工（金属·木材·橡胶·塑料·玻璃·陶瓷·建材）
+                                </option>
+                                <option th:selected="${#strings.equals(user.getUserPrefession(),'政府·非营利机构')}"
+                                        value="100010">政府·非营利机构
+                                </option>
+                                <option th:selected="${#strings.equals(user.getUserPrefession(),'房地产服务(中介·物业管理·监理、设计院)')}"
+                                        value="100011">房地产服务(中介·物业管理·监理、设计院)
+                                </option>
+                                <option th:selected="${#strings.equals(user.getUserPrefession(),'媒体·出版·文化传播')}"
+                                        value="100100">媒体·出版·文化传播
+                                </option>
+                                <option th:selected="${#strings.equals(user.getUserPrefession(),'化工')}" value="100101">
+                                    化工
+                                </option>
+                                <option th:selected="${#strings.equals(user.getUserPrefession(),'采掘·冶炼')}"
+                                        value="100110">采掘·冶炼
+                                </option>
+                                <option th:selected="${#strings.equals(user.getUserPrefession(),'能源（电力·石油）·水利')}"
+                                        value="100111">能源（电力·石油）·水利
+                                </option>
+                                <option th:selected="${#strings.equals(user.getUserPrefession(),'软件外包')}"
+                                        value="101000">软件外包
+                                </option>
+                                <option th:selected="${#strings.equals(user.getUserPrefession(),'网络游戏')}"
+                                        value="101001">网络游戏
+                                </option>
+                                <option th:selected="${#strings.equals(user.getUserPrefession(),'嵌入式')}" value="101010">
+                                    嵌入式
+                                </option>
+                                <option th:selected="${#strings.equals(#strings.trim(user.getUserPrefession()),'国防/军队')}"
+                                        value="101011">国防/军队
+                                </option>
+                                <option th:selected="${#strings.equals('其他',#strings.trim(user.getUserPrefession()))}"
+                                        value="101100">其他
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <!--地区-->
+                <div class="row" style="padding-bottom: 0 !important;padding-top: 0 !important;">
+                    <div class="center aligned three wide column" style="padding-top: 0.5em !important;" >
+                        地区
+                    </div>
+                    <div class="thirteen wide column" style="margin-top: 5px !important;padding-left: 0 !important;">
+                         <div class="thirteen wide column" style="border-radius: .28571429rem; margin-top: 5px !important;padding-left: 0 !important;">
+                              <div data-toggle="distpicker">
+                                  <select style="border-radius: .28571429rem;border: 1px solid rgba(34,36,38,.15);padding: .67861429em 1em;line-height: 1em;min-width: 130px !important;" id="province" data-province="---- 选择省 ----" name="country" >
+                                      <option selected th:text="${country}"></option>
+                                  </select>
+                                  <select  style="border-radius: .28571429rem;border: 1px solid rgba(34,36,38,.15);padding: .67861429em 1em;line-height: 1em;" id="city" data-city="---- 选择市 ----" name="city">
+                                      <option selected th:text="${city}"></option>
+                                   </select>
+                                  <select style="border-radius: .28571429rem;border: 1px solid rgba(34,36,38,.15);padding: .67861429em 1em;line-height: 1em;min-width: 130px !important;" id="district" data-district="---- 选择区 ----" name="county" >
+                                      <option selected th:text="${county}"></option>
+                                  </select>
+                              </div>
+                         </div>
+                    </div>
+                </div>
+                <!--简介-->
+                <div class="row" style="padding-bottom: 0 !important;padding-top: 0 !important;">
+                    <div class="center aligned three wide column" style="padding-top: 0.5em !important;">
+                        简介
+                    </div>
+                    <div class="thirteen wide column" style="margin-top: 5px !important;padding-left: 0 !important;">
+                        <div class="ui field">
+                            <div class="thirteen wide column"
+                                 style="margin-top: 5px !important;padding-left: 0 !important;">
+                                <div class="ui form">
+                                    <div class="comment">
+                                        <textarea name="userDescription" id="input-desc" rows="2" placeholder="300字以内" th:text="${user.getUserDescription()}"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="right aligned row" style="padding-bottom: 5px !important;">
+                    <div class="right aligned sixteen wide column" style="padding-top: 0.5em !important;">
+                        <button type="button" id="cancel-btn" class="ui  floated button">取消</button>
+                        <button type="submit" class="ui  floated submit button  red">确定</button>
+                    </div>
+                </div>
+
+                <div class="row" style="padding-bottom: 10px !important;"></div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!--头像上传框-->
+<div class="am-modal am-modal-no-btn up-modal-frame" tabindex="-1" id="up-modal-frame">
+    <div class="am-modal-dialog up-frame-parent up-frame-radius">
+        <div class="am-modal-hd up-frame-header">
+            <label style="color: #0a001f !important;">修改头像</label>
+            <a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>
+        </div>
+        <div class="am-modal-bd  up-frame-body">
+            <div class="am-g am-fl">
+                <div style="margin-top: 15px !important;margin-bottom: 15px !important;" class="am-form-group am-form-file">
+                    <div class="am-fl">
+                        <button style="font-size: 16px !important;" type="button" class="am-btn am-btn-default am-btn-sm">
+                            <i class="am-icon-cloud-upload"></i> 选择要上传的文件</button>
+                    </div>
+                    <input type="file" class="up-img-file">
+                </div>
+            </div>
+            <div class="am-g am-fl">
+                <div class="up-pre-before up-frame-radius">
+                    <img alt="" src="" class="up-img-show" id="up-img-show" >
+                </div>
+                <div class="up-pre-after up-frame-radius">
+                </div>
+            </div>
+            <div class="am-g am-fl">
+                <div class="up-control-btns">
+                    <span class="am-icon-rotate-left"   id="up-btn-left"></span>
+                    <span class="am-icon-rotate-right"  id="up-btn-right"></span>
+                    <span class="am-icon-check up-btn-ok" th:href="@{/manage/uc/uploadImg(userId=${user.getUserId()})}"  parameter="{width:'100',height:'100'}">
+    				</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!--加载框-->
+<div class="am-modal am-modal-loading am-modal-no-btn" tabindex="-1" id="up-modal-loading">
+    <div class="am-modal-dialog">
+        <div class="am-modal-hd">正在上传...</div>
+        <div class="am-modal-bd">
+            <span class="am-icon-spinner am-icon-spin"></span>
+        </div>
+    </div>
+</div>
+
+<!--警告框-->
+<div class="am-modal am-modal-alert" tabindex="-1" id="up-modal-alert">
+    <div class="am-modal-dialog">
+        <div class="am-modal-hd">上传成功！</div>
+        <div style="color: black !important;padding-top: 10px !important;font-size: 16px !important;" class="am-modal-bd"  id="alert_content">
+        </div>
+        <div class="am-modal-footer">
+            <span id="image-msg-btn" class="am-modal-btn">确定</span>
+        </div>
+    </div>
+</div>
+
+
+<div style="height: 10em"></div>
+<!--底部footer-->
+<div th:replace="~{footer :: footbar}"></div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
+<script src="../../../static/js/easyblog.js" th:src="@{/static/js/easyblog.js}"></script>
+<script src="js/distpicker.data.js" th:src="@{/static/js/distpicker.data.js}"></script>
+<script src="js/distpicker.js" th:src="@{/static/js/distpicker.js}"></script>
+<script src="js/distpicker.main.js" th:src="@{/static/js/distpicker.main.js}"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        let userId=$('#userId').val();
+        showPageZoomWarning();
+        toggleStatus(userId);
+        logOut(userId);
+        $('.ui.selection.dropdown').css('cssText','min-width:446px !important');
+    });
+</script>
+<script type="text/javascript">
+    $(function () {
+        $('a[rel*=leanModal]').leanModal({top: 200, closeButton: ".modal_close"});
+    });
+    $('#cancel-btn').click(function () {
+        $('#signup').css("display", "none");
+    });
+</script>
+<!--弹出框js-->
+<script type="text/javascript">
+    (function ($) {
+        $.fn.extend({
+            leanModal: function (options) {
+                var defaults = {
+                    top: 100,
+                    overlay: 0.5,
+                    closeButton: null
+                };
+                var overlay = $("<div id='lean_overlay'></div>");
+                $("body").append(overlay);
+                options = $.extend(defaults, options);
+                return this.each(function () {
+                    var o = options;
+                    $(this).click(function (e) {
+                        var modal_id = $(this).attr("href");
+                        $("#lean_overlay").click(function () {
+                            close_modal(modal_id)
+                        });
+                        $(o.closeButton).click(function () {
+                            close_modal(modal_id)
+                        });
+                        var modal_height = $(modal_id).outerHeight();
+                        var modal_width = $(modal_id).outerWidth();
+                        $("#lean_overlay").css({
+                            "display": "block",
+                            opacity: 0
+                        });
+                        $("#lean_overlay").fadeTo(200, o.overlay);
+                        $(modal_id).css({
+                            "display": "block",
+                            "position": "fixed",
+                            "opacity": 0,
+                            "z-index": 11000,
+                            "left": 50 + "%",
+                            "margin-left": -(modal_width / 2) + "px",
+                            "top": o.top - 140 + "px"
+                        });
+                        $(modal_id).fadeTo(200, 1);
+                        e.preventDefault()
+                    })
+                });
+
+                function close_modal(modal_id) {
+                    $("#lean_overlay").fadeOut(200);
+                    $(modal_id).css({
+                        "display": "none"
+                    })
+                }
+            }
+        })
+    })(jQuery);
+</script>
+<script>
+    $('.menu.toggle').click(function () {
+        $('.m-item').toggleClass('m-mobile-hide');
+    });
+
+    $('.ui.dropdown').dropdown({
+        on: 'hover'
+    });
+
+    $('#searchBar').click(function () {
+        $('#reloadSearchBar').css("display", "block");  //显示div
+    });
+</script>
+<script type="text/javascript">
+    $('#input-desc').focus(function () {
+        $('#input-desc').attr("rows", "4");
+    });
+    $('#input-desc').blur(function () {
+        $('#input-desc').attr("rows", "2");
+    });
+    $('.length.example form')
+        .form({
+            fields: {
+                on: 'blur',
+                maxLength: {
+                    identifier: 'maxLength',
+                    rules: [
+                        {
+                            type: 'maxLength[300]',
+                            prompt: '300字以内'
+                        }
+                    ]
+                }
+            }
+        });
+</script>
+<script>
+    $('#side-profile').css("background", "#ca0c16");
+    $('#side-profile').css("color", "#ffffff")
+</script>
+<script th:ononline="javascript">
+    var province="[[${country}]]";
+    var city="[[${city}]]";
+    var district="[[${county}]]";
+    $("#distpicker").distpicker({
+        province: province,
+        city: city,
+        district: district
+    });
+</script>
+<script th:src="@{/static/js/amazeui.min.js}"></script>
+<script th:src="@{/static/js/cropper.min.js}"></script>
+<script th:src="@{/static/js/custom_up_img.js}"></script>
+</html>

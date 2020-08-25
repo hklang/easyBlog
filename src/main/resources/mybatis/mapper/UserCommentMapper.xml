@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.easyblog.mapper.UserCommentMapper">
+  <cache type="org.mybatis.caches.ehcache.LoggingEhcache">
+    <property name="eviction" value="LRU" />
+    <property name="flushInterval" value="6000000" />
+    <property name="size" value="1024" />
+    <property name="readOnly" value="false" />
+  </cache>
+  <resultMap id="BaseResultMap" type="top.easyblog.entity.po.UserComment">
+    <id column="comment_id" jdbcType="INTEGER" property="commentId" />
+    <result column="comment_send" jdbcType="INTEGER" property="commentSend" />
+    <result column="comment_received" jdbcType="INTEGER" property="commentReceived" />
+    <result column="article_id" jdbcType="BIGINT" property="articleId" />
+    <result column="comment_time" jdbcType="TIMESTAMP" property="commentTime" />
+    <result column="like_num" jdbcType="INTEGER" property="likeNum" />
+    <result column="pid" jdbcType="INTEGER" property="pid" />
+    <result column="level" jdbcType="INTEGER" property="level" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="top.easyblog.entity.po.UserComment">
+    <result column="comment_content" jdbcType="LONGVARCHAR" property="commentContent" />
+  </resultMap>
+
+  <!--根据主键查询评论-->
+  <select id="getByPrimaryKey" parameterType="long" resultType="top.easyblog.entity.po.UserComment">
+    select * from user_comment where comment_id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <!--获得一个评论的子评论-->
+  <select id="getByPidAndPrimaryKey" resultType="top.easyblog.entity.po.UserComment">
+    select * from user_comment where article_id=#{articleId} AND pid=#{pid}
+  </select>
+
+  <!--获得关于一篇文章的所有父级评论-->
+  <select id="getTopCommentsByArticleId" resultType="top.easyblog.entity.po.UserComment">
+    select * from user_comment where article_id=#{articleId} AND pid = 0
+  </select>
+
+  <select id="getAll" resultType="list">
+    select * from user_comment
+  </select>
+
+  <select id="countReceivedComment" resultType="integer">
+    select count(*) from user_comment where  comment_received=#{receivedUser}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="long">
+    delete from user_comment where comment_id = #{commentId,jdbcType=INTEGER}
+  </delete>
+
+  <select id="getSendComment" resultType="top.easyblog.entity.po.UserComment">
+    select * from user_comment where comment_send=#{sendUser}
+  </select>
+
+  <select id="getReceiveComment" resultType="top.easyblog.entity.po.UserComment">
+    select * from user_comment where comment_received=#{receiveUser}
+  </select>
+
+  <insert id="save" parameterType="top.easyblog.entity.po.UserComment">
+    insert into user_comment (comment_send, comment_received,
+      article_id, comment_time, like_num, 
+      pid, level, comment_content)
+    values (#{commentSend,jdbcType=INTEGER}, #{commentReceived,jdbcType=INTEGER},
+      #{articleId,jdbcType=BIGINT}, now(), 0, #{pid,jdbcType=INTEGER}, #{level,jdbcType=INTEGER}, #{commentContent,jdbcType=LONGVARCHAR})
+  </insert>
+
+  <insert id="saveSelective" parameterType="top.easyblog.entity.po.UserComment">
+    insert into user_comment
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="commentId != null">
+        comment_id,
+      </if>
+      <if test="commentSend != null">
+        comment_send,
+      </if>
+      <if test="commentReceived != null">
+        comment_received,
+      </if>
+      <if test="articleId != null">
+        article_id,
+      </if>
+      <if test="commentTime != null">
+        comment_time,
+      </if>
+      <if test="likeNum != null">
+        like_num,
+      </if>
+      <if test="pid != null">
+        pid,
+      </if>
+      <if test="level != null">
+        level,
+      </if>
+      <if test="commentContent != null">
+        comment_content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="commentId != null">
+        #{commentId,jdbcType=INTEGER},
+      </if>
+      <if test="commentSend != null">
+        #{commentSend,jdbcType=INTEGER},
+      </if>
+      <if test="commentReceived != null">
+        #{commentReceived,jdbcType=INTEGER},
+      </if>
+      <if test="articleId != null">
+        #{articleId,jdbcType=BIGINT},
+      </if>
+      <if test="commentTime != null">
+        #{commentTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="likeNum != null">
+        #{likeNum,jdbcType=INTEGER},
+      </if>
+      <if test="pid != null">
+        #{pid,jdbcType=INTEGER},
+      </if>
+      <if test="level != null">
+        #{level,jdbcType=INTEGER},
+      </if>
+      <if test="commentContent != null">
+        #{commentContent,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="top.easyblog.entity.po.UserComment">
+    update user_comment
+    <set>
+      <if test="commentSend != null">
+        comment_send = #{commentSend,jdbcType=INTEGER},
+      </if>
+      <if test="commentReceived != null">
+        comment_received = #{commentReceived,jdbcType=INTEGER},
+      </if>
+      <if test="articleId != null">
+        article_id = #{articleId,jdbcType=BIGINT},
+      </if>
+      <if test="commentTime != null">
+        comment_time = #{commentTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="likeNum != null">
+        like_num = #{likeNum,jdbcType=INTEGER},
+      </if>
+      <if test="pid != null">
+        pid = #{pid,jdbcType=INTEGER},
+      </if>
+      <if test="level != null">
+        level = #{level,jdbcType=INTEGER},
+      </if>
+      <if test="commentContent != null">
+        comment_content = #{commentContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where comment_id = #{commentId,jdbcType=INTEGER}
+  </update>
+
+  <update id="updateByPrimaryKeyWithContent" parameterType="top.easyblog.entity.po.UserComment">
+    update user_comment
+    set comment_send = #{commentSend,jdbcType=INTEGER},
+      comment_received = #{commentReceived,jdbcType=INTEGER},
+      article_id = #{articleId,jdbcType=BIGINT},
+      comment_time = #{commentTime,jdbcType=TIMESTAMP},
+      like_num = #{likeNum,jdbcType=INTEGER},
+      pid = #{pid,jdbcType=INTEGER},
+      level = #{level,jdbcType=INTEGER},
+      comment_content = #{commentContent,jdbcType=LONGVARCHAR}
+    where comment_id = #{commentId,jdbcType=INTEGER}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="top.easyblog.entity.po.UserComment">
+    update user_comment
+    set comment_send = #{commentSend,jdbcType=INTEGER},
+      comment_received = #{commentReceived,jdbcType=INTEGER},
+      article_id = #{articleId,jdbcType=BIGINT},
+      comment_time = #{commentTime,jdbcType=TIMESTAMP},
+      like_num = #{likeNum,jdbcType=INTEGER},
+      pid = #{pid,jdbcType=INTEGER},
+      level = #{level,jdbcType=INTEGER}
+    where comment_id = #{commentId,jdbcType=INTEGER}
+  </update>
+
+
+</mapper>

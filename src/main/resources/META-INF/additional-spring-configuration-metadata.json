@@ -1,0 +1,53 @@
+{
+  "properties": [
+    {
+      "name": "spring.profiles",
+      "type": "java.lang.String",
+      "description": "Description for spring.profiles."
+    },
+    {
+      "name": "spring.datasource.initial-size",
+      "type": "java.lang.String",
+      "description": "Description for spring.datasource.initial-size."
+    },
+    {
+      "name": "qiniucloud.accessKey",
+      "type": "java.lang.String",
+      "description": "Description for qiniuCloud.accessKey."
+    },
+    {
+      "name": "qiniucloud.secretKey",
+      "type": "java.lang.String",
+      "description": "Description for qiniuCloud.secretKey."
+    },
+    {
+      "name": "qiniucloud.bucket",
+      "type": "java.lang.String",
+      "description": "Description for qiniuCloud.bucket."
+    },
+    {
+      "name": "qiniucloud.domain",
+      "type": "java.lang.String",
+      "description": "Description for qiniuCloud.domain."
+    },
+    {
+      "name": "domain",
+      "type": "java.lang.String",
+      "description": "Description for domain."
+    },
+    {
+      "name": "project.version",
+      "type": "java.lang.String",
+      "description": "Description for easyblog.version."
+    },
+    {
+      "name": "project.name",
+      "type": "java.lang.String",
+      "description": "Description for easyblog.name."
+    },
+    {
+      "name": "project.engineering-code",
+      "type": "java.lang.String",
+      "description": "Description for project.engineering-code."
+    }
+  ] }

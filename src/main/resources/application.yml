@@ -1,0 +1,51 @@
+project:
+  version: 1.0
+  name: EasyBlog
+  engineering-code: Blue planet
+#公用环境
+spring:
+  profiles:
+    active: dev
+  thymeleaf:
+   enabled: true
+   #默认是classpath:/templates/
+   prefix: classpath:/templates/
+   suffix: .html
+   mode: HTML
+   encoding: UTF-8
+   servlet:
+     content-type: text/html
+  #邮件相关配置
+  mail:
+    host: smtp.qq.com
+    password: wwqznxqyajhdeahg   #这里的password是生成的授权码，不是账户密码
+    username: huangxin9830@qq.com  #发送邮件的账户名
+    properties:      #properties的值应该是一个Map
+      mail.smpt.ssl: true       #设置使用SSL安全协议
+  cache:
+    ehcache:
+      config: classpath:ehcache-spring.xml   # ehcache缓存配置文件的位置
+mybatis:
+  config-location: classpath:/mybatis/mybatis-config.xml
+  mapper-locations: classpath:/mybatis/mapper/*.xml
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  pageSizeZero: true
+
+logging:
+  config: classpath:logback-spring.xml
+
+#七牛云配置
+qiniucloud:
+  accessKey: vRxHtqsnLfzK2h2DTGcEfFlLLDDNgqAvoZf0H08D
+  secretKey: 5No0lIzPOv2pYDX9wPkFFh_kE99lvpPia0nA0ZPH
+  domain: image.easyblog.top
+  bucket-name: easyblog-pro
+
+#第三方授权登录
+oauth:
+  github:
+    authorizeUrl: https://github.com/login/oauth/authorize
+    accessTokenUrl: https://github.com/login/oauth/access_token
+    userInfoUrl: https://api.github.com/user
