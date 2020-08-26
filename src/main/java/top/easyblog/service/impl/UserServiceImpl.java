@@ -125,6 +125,7 @@ public class UserServiceImpl implements IUserService {
     public int register(User user) {
         String headImageUrl = DefaultImageDispatcherUtils.defaultAvatar();
         try {
+            //user.setUserId(0);
             user.setUserScore(0);
             user.setUserRank(1000000);
             user.setUserDescription(null);

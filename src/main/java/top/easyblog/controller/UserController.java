@@ -210,9 +210,10 @@ public class UserController extends BaseController {
             ajaxResult.setMessage("昵称已存在!");
         } else if (userService.getUser(account) != null) {
             ajaxResult.setMessage("此邮箱/手机号已经注册了!");
-        } else if (Objects.isNull(captcha) || !captcha.equals(captchaCode)) {
-            ajaxResult.setMessage("验证码不正确或验证码已过期!");
-        } else {
+        }
+//        } else if (Objects.isNull(captcha) || !captcha.equals(captchaCode)) {
+//            ajaxResult.setMessage("验证码不正确或验证码已过期!");
+       else {
             try {
                 User user = new User();
                 user.setUserNickname(nickname);

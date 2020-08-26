@@ -229,7 +229,7 @@ public class CategoryAdminController extends BaseController {
                     String data = encoder.encode(categoryImg.getBytes());
                     attributes.addFlashAttribute("categoryImg", "data:image/jpeg;base64," + data);
                 } catch (Exception e) {
-                    log.error(e.getMessage());
+                    //log.error(e.getMessage());
                 }
             }
             if (StringUtil.isEmpty(categoryName)) {
