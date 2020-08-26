@@ -132,7 +132,7 @@ public class UserServiceImpl implements IUserService {
             user.setUserHeaderImgUrl(headImageUrl);
             user.setUserLock(UserLock.UNLOCK.getStatus());
             user.setUserFreeze(UserFreeze.UNFREEZE.getStatus());
-            user.setUserPower(2);
+           user.setUserPower(2);
             user.setUserLevel(0);
             user.setUserVisit(0);
             return userMapper.save(user);
